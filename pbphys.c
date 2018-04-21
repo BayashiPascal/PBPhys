@@ -831,12 +831,12 @@ VecFloat3D PBPhysGetDistPoly(VecFloat* posA, VecFloat* dirA,
   VecFloat3D res = VecFloatCreateStatic3D();
   // Loop on dimensions
   for (int iDim = VecGetDim(posA); iDim--;) {
-    VecSet(&res, 0, VecGet(&res, 0) + 
+    VecSetAdd(&res, 0, 
       fsquare(VecGet(posA, iDim) - VecGet(posB, iDim)));
-    VecSet(&res, 1, VecGet(&res, 1) + 
+    VecSetAdd(&res, 1, 
       (VecGet(posA, iDim) - VecGet(posB, iDim)) *
       (VecGet(dirA, iDim) - VecGet(dirB, iDim)));
-    VecSet(&res, 2, VecGet(&res, 2) + 
+    VecSetAdd(&res, 2, 
       fsquare(VecGet(dirA, iDim) - VecGet(dirB, iDim)));
   }
   VecSet(&res, 1, VecGet(&res, 1) * 2.0);
