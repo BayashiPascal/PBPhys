@@ -54,11 +54,20 @@ PBPhysParticle* PBPhysParticleClone(PBPhysParticle* that);
 // Print the particle 'that' on the stream 'stream'
 void PBPhysParticlePrintln(PBPhysParticle* that, FILE* stream);
 
+// Function which return the JSON encoding of 'that' 
+JSONNode* PBPhysParticleEncodeAsJSON(PBPhysParticle* that);
+
+// Function which decode from JSON encoding 'json' to 'that'
+bool PBPhysParticleDecodeAsJSON(PBPhysParticle** that, JSONNode* json);
+
 // Save the particle 'that' on the stream 'stream'
+// If 'compact' equals true it saves in compact form, else it saves in 
+// readable form
 // Return true if we could save the particle
 // Return false else
 // If user data is attached to the particle it must be saved by the user
-bool PBPhysParticleSave(PBPhysParticle* that, FILE* stream); 
+bool PBPhysParticleSave(PBPhysParticle* that, FILE* stream, 
+  bool compact); 
 
 // Load the particle 'that' from the stream 'stream'
 // Return true if we could load the particle
@@ -260,10 +269,18 @@ PBPhys* PBPhysClone(PBPhys* that);
 // Print the PBPhys 'that' on the stream 'stream'
 void PBPhysPrintln(PBPhys* that, FILE* stream);
 
+// Function which return the JSON encoding of 'that' 
+JSONNode* PBPhysEncodeAsJSON(PBPhys* that);
+
+// Function which decode from JSON encoding 'json' to 'that'
+bool PBPhysDecodeAsJSON(PBPhys** that, JSONNode* json);
+
 // Save the PBPhys 'that' on the stream 'stream'
+// If 'compact' equals true it saves in compact form, else it saves in 
+// readable form
 // Return true if we could save the PBPhys
 // Return false else
-bool PBPhysSave(PBPhys* that, FILE* stream); 
+bool PBPhysSave(PBPhys* that, FILE* stream, bool compact); 
 
 // Load the PBPhys 'that' from the stream 'stream'
 // Return true if we could load the PBPhys

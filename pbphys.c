@@ -122,11 +122,136 @@ void PBPhysParticlePrintln(PBPhysParticle* that, FILE* stream) {
     fprintf(stream, "unfixed\n"); 
 }
 
+// Function which return the JSON encoding of 'that' 
+JSONNode* PBPhysParticleEncodeAsJSON(PBPhysParticle* that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  // Create the JSON structure
+  JSONNode* json = JSONCreate();
+  // Declare a buffer to convert value into string
+  char val[100];
+  // Encode the dim
+  sprintf(val, "%d", PBPhysParticleGetDim(that));
+  JSONAddProp(json, "_dim", val);
+  // Encode the type
+  sprintf(val, "%d", PBPhysParticleGetShapeType(that));
+  JSONAddProp(json, "_type", val);
+  // Encode the shape
+  JSONAddProp(json, "_shape", 
+    ShapoidEncodeAsJSON(PBPhysParticleShape(that)));
+  // Encode the speed
+  JSONAddProp(json, "_speed", 
+    VecEncodeAsJSON(PBPhysParticleSpeed(that)));
+  // Encode the acceleration
+  JSONAddProp(json, "_accel", 
+    VecEncodeAsJSON(PBPhysParticleAccel(that)));
+  // Encode the mass
+  sprintf(val, "%f", that->_mass);
+  JSONAddProp(json, "_mass", val);
+  // Encode the drag
+  sprintf(val, "%f", that->_drag);
+  JSONAddProp(json, "_drag", val);
+  // Encode the fixed
+  sprintf(val, "%d", that->_fixed);
+  JSONAddProp(json, "_fixed", val);
+  // Return the created JSON 
+  return json;
+}
+
+// Function which decode from JSON encoding 'json' to 'that'
+bool PBPhysParticleDecodeAsJSON(PBPhysParticle** that, JSONNode* json) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+  if (json == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'json' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  // If 'that' is already allocated
+  if (*that != NULL)
+    // Free memory
+    PBPhysParticleFree(that);
+  // Get the dim from the JSON
+  JSONNode* prop = JSONProperty(json, "_dim");
+  if (prop == NULL) {
+    return false;
+  }
+  int dim = atoi(JSONLabel(JSONValue(prop, 0)));
+  // Get the type from the JSON
+  prop = JSONProperty(json, "_type");
+  if (prop == NULL) {
+    return false;
+  }
+  int type = atoi(JSONLabel(JSONValue(prop, 0)));
+  // If the data is invalid
+  if (dim <= 0)
+    return false;
+  // Allocate memory
+  *that = PBPhysParticleCreate(dim, type);
+  // Decode the shape
+  prop = JSONProperty(json, "_shape");
+  if (prop == NULL) {
+    return false;
+  }
+  if (!ShapoidDecodeAsJSON(&((*that)->_shape), prop)) {
+    return false;
+  }
+  // Decode the speed
+  prop = JSONProperty(json, "_speed");
+  if (prop == NULL) {
+    return false;
+  }
+  if (!VecDecodeAsJSON(&((*that)->_speed), prop)) {
+    return false;
+  }
+  // Decode the accel
+  prop = JSONProperty(json, "_accel");
+  if (prop == NULL) {
+    return false;
+  }
+  if (!VecDecodeAsJSON(&((*that)->_accel), prop)) {
+    return false;
+  }
+  // Get the mass from the JSON
+  prop = JSONProperty(json, "_mass");
+  if (prop == NULL) {
+    return false;
+  }
+  (*that)->_mass = atof(JSONLabel(JSONValue(prop, 0)));
+  // Get the drag from the JSON
+  prop = JSONProperty(json, "_drag");
+  if (prop == NULL) {
+    return false;
+  }
+  (*that)->_drag = atof(JSONLabel(JSONValue(prop, 0)));
+  // Get the fixed from the JSON
+  prop = JSONProperty(json, "_fixed");
+  if (prop == NULL) {
+    return false;
+  }
+  (*that)->_fixed = atoi(JSONLabel(JSONValue(prop, 0)));
+  // Return the success code
+  return true;
+}
+
 // Save the particle 'that' on the stream 'stream'
+// If 'compact' equals true it saves in compact form, else it saves in 
+// readable form
 // Return true if we could save the particle
 // Return false else
 // If user data is attached to the particle it must be saved by the user
-bool PBPhysParticleSave(PBPhysParticle* that, FILE* stream) {
+bool PBPhysParticleSave(PBPhysParticle* that, FILE* stream, 
+  bool compact) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -139,22 +264,15 @@ bool PBPhysParticleSave(PBPhysParticle* that, FILE* stream) {
     PBErrCatch(PBPhysErr);
   }
 #endif
-  // Save the shape
-  if (!ShapoidSave(PBPhysParticleShape(that), stream))
+  // Get the JSON encoding
+  JSONNode* json = PBPhysParticleEncodeAsJSON(that);
+  // Save the JSON
+  if (!JSONSave(json, stream, compact)) {
     return false;
-  // Save the speed
-  if (!VecSave(PBPhysParticleSpeed(that), stream))
-    return false;
-  // Save the acceleration
-  if (!VecSave(PBPhysParticleAccel(that), stream))
-    return false;
-  // Save the mass and drag and fixed
-  int ret = fprintf(stream, "%f %f %d\n", that->_mass, that->_drag,
-    that->_fixed);
-  // If we coudln't fprintf
-  if (ret < 0)
-    return false;
-  // Return the success code
+  }
+  // Free memory
+  JSONFree(&json);
+  // Return success code
   return true;
 }
 
@@ -175,46 +293,18 @@ bool PBPhysParticleLoad(PBPhysParticle** that, FILE* stream) {
     PBErrCatch(PBPhysErr);
   }
 #endif
-  // If the particle is allocated
-  if (*that != NULL)
-    // Free the memory
-    PBPhysParticleFree(that);
-  // Allocate memory for a new particle
-  *that = PBErrMalloc(PBPhysErr, sizeof(PBPhysParticle));
-  (*that)->_shape = NULL;  
-  (*that)->_speed = NULL;  
-  (*that)->_accel = NULL;  
-  // Load the shape
-  if (!ShapoidLoad(&((*that)->_shape), stream)) {
-    PBPhysParticleFree(that);
+  // Declare a json to load the encoded data
+  JSONNode* json = JSONCreate();
+  // Load the whole encoded data
+  if (!JSONLoad(json, stream)) {
     return false;
   }
-  // Load the speed
-  if (!VecLoad(&((*that)->_speed), stream) ||
-    VecGetDim((*that)->_speed) != ShapoidGetDim((*that)->_shape)) {
-    PBPhysParticleFree(that);
+  // Decode the data from the JSON
+  if (!PBPhysParticleDecodeAsJSON(that, json)) {
     return false;
   }
-  // Load the accel
-  if (!VecLoad(&((*that)->_accel), stream) ||
-    VecGetDim((*that)->_accel) != ShapoidGetDim((*that)->_shape)) {
-    PBPhysParticleFree(that);
-    return false;
-  }
-  (*that)->_sysAccel = VecFloatCreate(VecGetDim((*that)->_accel));
-  // Load the mass and drag and fixed
-  int fixed;
-  int ret = fscanf(stream, "%f %f %d", &((*that)->_mass), 
-    &((*that)->_drag), &fixed);
-  // If we couldn't fscanf
-  if (ret == EOF) {
-    PBPhysParticleFree(that);
-    return false;
-  }
-  if (fixed)
-    (*that)->_fixed = true;
-  else
-    (*that)->_fixed = false;
+  // Free the memory used by the JSON
+  JSONFree(&json);
   // Return the success code
   return true;
 }
@@ -466,10 +556,142 @@ void PBPhysPrintln(PBPhys* that, FILE* stream) {
   }
 }
 
+// Function which return the JSON encoding of 'that' 
+JSONNode* PBPhysEncodeAsJSON(PBPhys* that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  // Create the JSON structure
+  JSONNode* json = JSONCreate();
+  // Declare a buffer to convert value into string
+  char val[100];
+  // Encode the dimension
+  sprintf(val, "%d", that->_dim);
+  JSONAddProp(json, "_dim", val);
+  // Encode the curTime
+  sprintf(val, "%f", that->_curTime);
+  JSONAddProp(json, "_curTime", val);
+  // Encode the deltat
+  sprintf(val, "%f", that->_deltaT);
+  JSONAddProp(json, "_deltaT", val);
+  // Encode the downGravity
+  sprintf(val, "%f", that->_downGravity);
+  JSONAddProp(json, "_downGravity", val);
+  // Encode the gravity
+  sprintf(val, "%f", that->_gravity);
+  JSONAddProp(json, "_gravity", val);
+  // Encode the nbParticle
+  sprintf(val, "%d", PBPhysGetNbParticle(that));
+  JSONAddProp(json, "_nbParticle", val);
+  // Encode the particles
+  // Declare an array of structures converted to string
+  JSONArrayStruct setPart = JSONArrayStructCreateStatic();
+  if (PBPhysGetNbParticle(that) > 0) {
+    GSetIterForward iter = 
+      GSetIterForwardCreateStatic(PBPhysParticles(that));
+    do {
+      PBPhysParticle* part = GSetIterGet(&iter);
+      JSONArrayStructAdd(&setPart, 
+        PBPhysParticleEncodeAsJSON(part));
+
+    } while (GSetIterStep(&iter));
+  }
+  // Add a key with the array of structures
+  JSONAddProp(json, "_particles", &setPart);
+  // Free memory
+  JSONArrayStructFlush(&setPart);
+  // Return the created JSON 
+  return json;
+}
+
+// Function which decode from JSON encoding 'json' to 'that'
+bool PBPhysDecodeAsJSON(PBPhys** that, JSONNode* json) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'that' is null");
+    PBErrCatch(PBMathErr);
+  }
+  if (json == NULL) {
+    PBMathErr->_type = PBErrTypeNullPointer;
+    sprintf(PBMathErr->_msg, "'json' is null");
+    PBErrCatch(PBMathErr);
+  }
+#endif
+  // If 'that' is already allocated
+  if (*that != NULL)
+    // Free memory
+    PBPhysFree(that);
+  // Decode the dimension
+  JSONNode* prop = JSONProperty(json, "_dim");
+  if (prop == NULL) {
+    return false;
+  }
+  int dim = atoi(JSONLabel(JSONValue(prop, 0)));
+  // If data is invalid
+  if (dim <= 0)
+    return false;
+  // Allocate memory
+  *that = PBPhysCreate(dim);
+  // Decode the curTime
+  prop = JSONProperty(json, "_curTime");
+  if (prop == NULL) {
+    return false;
+  }
+  (*that)->_curTime = atof(JSONLabel(JSONValue(prop, 0)));
+  // Decode the deltaT
+  prop = JSONProperty(json, "_deltaT");
+  if (prop == NULL) {
+    return false;
+  }
+  (*that)->_deltaT = atof(JSONLabel(JSONValue(prop, 0)));
+  // Decode the downGravity
+  prop = JSONProperty(json, "_downGravity");
+  if (prop == NULL) {
+    return false;
+  }
+  (*that)->_downGravity = atof(JSONLabel(JSONValue(prop, 0)));
+  // Decode the gravity
+  prop = JSONProperty(json, "_gravity");
+  if (prop == NULL) {
+    return false;
+  }
+  (*that)->_gravity = atof(JSONLabel(JSONValue(prop, 0)));
+  // Decode the nbParticle
+  prop = JSONProperty(json, "_nbParticle");
+  if (prop == NULL) {
+    return false;
+  }
+  int nbParticle = atoi(JSONLabel(JSONValue(prop, 0)));
+  // Decode the particle
+  prop = JSONProperty(json, "_particles");
+  if (prop == NULL) {
+    return false;
+  }
+  if (JSONGetNbValue(prop) != nbParticle) {
+    return false;
+  }
+  for (int iPart = 0; iPart < nbParticle; ++iPart) {
+    JSONNode* part = JSONValue(prop, iPart);
+    PBPhysParticle* p = NULL;
+    if (!PBPhysParticleDecodeAsJSON(&p, part))
+      return false;
+    GSetAppend(PBPhysParticles(*that), p);
+  }
+  // Return the success code
+  return true;
+}
+
 // Save the PBPhys 'that' on the stream 'stream'
+// If 'compact' equals true it saves in compact form, else it saves in 
+// readable form
 // Return true if we could save the PBPhys
 // Return false else
-bool PBPhysSave(PBPhys* that, FILE* stream) {
+bool PBPhysSave(PBPhys* that, FILE* stream, bool compact) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -482,24 +704,15 @@ bool PBPhysSave(PBPhys* that, FILE* stream) {
     PBErrCatch(PBPhysErr);
   }
 #endif
-  // Save the properties
-  int ret = fprintf(stream, "%d %f %f %f %f %d\n", 
-    that->_dim, that->_curTime, that->_deltaT, that->_downGravity,
-    that->_gravity, PBPhysGetNbParticle(that));
-  // If we coudln't fprintf
-  if (ret < 0)
+  // Get the JSON encoding
+  JSONNode* json = PBPhysEncodeAsJSON(that);
+  // Save the JSON
+  if (!JSONSave(json, stream, compact)) {
     return false;
-  // Save the particles
-  if (PBPhysGetNbParticle(that) > 0) {
-    GSetIterForward iter = 
-      GSetIterForwardCreateStatic(PBPhysParticles(that));
-    do {
-      PBPhysParticle* part = GSetIterGet(&iter);
-      if (!PBPhysParticleSave(part, stream))
-        return false;
-    } while (GSetIterStep(&iter));
   }
-  // Return the success code
+  // Free memory
+  JSONFree(&json);
+  // Return success code
   return true;
 }
 
@@ -519,37 +732,18 @@ bool PBPhysLoad(PBPhys** that, FILE* stream) {
     PBErrCatch(PBPhysErr);
   }
 #endif
-  if (*that != NULL)
-    PBPhysFree(that);
-  // Load the dimension
-  int dim = 0;
-  int ret = fscanf(stream, "%d", &dim);
-  // If we coudln't fscanf
-  if (ret == EOF) {
-    PBPhysFree(that);
+  // Declare a json to load the encoded data
+  JSONNode* json = JSONCreate();
+  // Load the whole encoded data
+  if (!JSONLoad(json, stream)) {
     return false;
   }
-  // Create the loaded PBPhys
-  *that = PBPhysCreate(dim);
-  // Load the properties
-  int nbPart = 0;
-  ret = fscanf(stream, "%f %f %f %f %d", 
-    &((*that)->_curTime), &((*that)->_deltaT), &((*that)->_downGravity), 
-    &((*that)->_gravity), &nbPart);
-  // If we coudln't fscanf
-  if (ret == EOF) {
-    PBPhysFree(that);
+  // Decode the data from the JSON
+  if (!PBPhysDecodeAsJSON(that, json)) {
     return false;
   }
-  // Load the particles
-  for (int iPart = nbPart; iPart--;) {
-    PBPhysParticle* part = NULL;
-    if (!PBPhysParticleLoad(&part, stream)) {
-      PBPhysFree(that);
-      return false;
-    }
-    GSetAppend(PBPhysParticles(*that), part);
-  }
+  // Free the memory used by the JSON
+  JSONFree(&json);
   // Return the success code
   return true;
 }
