@@ -324,7 +324,10 @@ void PBPhysParticleMove(PBPhysParticle* that, float dt) {
     // Get the displacement
     VecFloat* disp = PBPhysParticleGetNextDisplacement(that, dt);
     // Update the position
-    VecOp(ShapoidPos(PBPhysParticleShape(that)), 1.0, disp, 1.0);
+    VecFloat* newPos = VecGetOp(
+      ShapoidPos(PBPhysParticleShape(that)), 1.0, disp, 1.0);
+    ShapoidSetPos(PBPhysParticleShape(that), newPos);
+    VecFree(&newPos);
     // Update the speed
     VecOp(PBPhysParticleSpeed(that), 1.0, 
       PBPhysParticleSpeed(that), -dt * PBPhysParticleGetDrag(that));

@@ -97,7 +97,7 @@ Shapoid* PBPhysParticleShape(PBPhysParticle* that);
 #if BUILDMODE != 0
 inline
 #endif
-VecFloat* PBPhysParticleAxis(PBPhysParticle* that, int iAxis);
+const VecFloat* PBPhysParticleAxis(PBPhysParticle* that, int iAxis);
 
 // Return the speed of the particle 'that'
 #if BUILDMODE != 0

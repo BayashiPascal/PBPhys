@@ -53,7 +53,7 @@ Shapoid* PBPhysParticleShape(PBPhysParticle* that) {
 #if BUILDMODE != 0
 inline
 #endif
-VecFloat* PBPhysParticleAxis(PBPhysParticle* that, int iAxis) {
+const VecFloat* PBPhysParticleAxis(PBPhysParticle* that, int iAxis) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -265,8 +265,9 @@ void _PBPhysParticleSetSizeVec(PBPhysParticle* that, VecFloat* size) {
   }
 #endif
   for (int iAxis = PBPhysParticleGetDim(that); iAxis--;) {
-    VecFloat* axis = ShapoidAxis(PBPhysParticleShape(that), iAxis);
-    VecScale(axis, VecGet(size, iAxis) / VecNorm(axis));
+    float scale = VecGet(size, iAxis) / 
+      VecNorm(ShapoidAxis(PBPhysParticleShape(that), iAxis));
+    ShapoidAxisScale(PBPhysParticleShape(that), iAxis, scale);
   }
 }
 
@@ -282,8 +283,9 @@ void _PBPhysParticleSetSizeScalar(PBPhysParticle* that, float size) {
   }
 #endif
   for (int iAxis = PBPhysParticleGetDim(that); iAxis--;) {
-    VecFloat* axis = ShapoidAxis(PBPhysParticleShape(that), iAxis);
-    VecScale(axis, size / VecNorm(axis));
+    float scale = size / 
+      VecNorm(ShapoidAxis(PBPhysParticleShape(that), iAxis));
+    ShapoidAxisScale(PBPhysParticleShape(that), iAxis, scale);
   }
 }
 

@@ -208,7 +208,7 @@ void UnitTestPBPhysParticleLoadSave() {
   PBPhysParticleSetAccel(particle, &w);
   PBPhysParticleSetMass(particle, 8.0);
   FILE* fd = fopen("./particle.txt", "w");
-  if (PBPhysParticleSave(particle, fd) == false) {
+  if (PBPhysParticleSave(particle, fd, false) == false) {
     PBPhysErr->_type = PBErrTypeUnitTestFailed;
     sprintf(PBPhysErr->_msg, "PBPhysParticleSave failed");
     PBErrCatch(PBPhysErr);
@@ -240,7 +240,7 @@ void UnitTestPBPhysParticleAccelMove() {
     0.005000,-0.002500,0.020000,-0.010000,0.045000,-0.022500,0.080000,
     -0.040000,0.125000,-0.062500,0.180000,-0.090000,0.245000,-0.122500,
     0.320000,-0.160000,0.405000,-0.202500,0.500000,-0.250000};
-  VecFloat* pos = ShapoidPos(PBPhysParticleShape(particle));
+  const VecFloat* pos = ShapoidPos(PBPhysParticleShape(particle));
   for (int i = 0; i < 10; ++i) {
     PBPhysParticleMove(particle, dt);
     if (ISEQUALF(VecGet(PBPhysParticleSpeed(particle), 0), 
@@ -260,7 +260,8 @@ void UnitTestPBPhysParticleAccelMove() {
   }
   float drag = 0.1;
   PBPhysParticleSetDrag(particle, drag);
-  VecSetNull(pos);
+  VecFloat2D vecNull = VecFloatCreateStatic2D();
+  ShapoidSetPos(PBPhysParticleShape(particle), &vecNull);
   VecSetNull(PBPhysParticleSpeed(particle));
   float checkC[20] = {
     0.100000,-0.050000,0.199000,-0.099500,0.297010,-0.148505,0.394040,
@@ -308,8 +309,8 @@ void UnitTestPBPhysParticleTestTrajectory() {
   float dt = 0.01;
   float t = 0.0;
   FILE* fd = fopen("./traj.txt", "w");
-  VecFloat* posam = ShapoidPos(PBPhysParticleShape(am));
-  VecFloat* posamd = ShapoidPos(PBPhysParticleShape(amd));
+  const VecFloat* posam = ShapoidPos(PBPhysParticleShape(am));
+  const VecFloat* posamd = ShapoidPos(PBPhysParticleShape(amd));
   for (int i = 0; i < 100; ++i) {
     PBPhysParticleMove(am, dt);
     PBPhysParticleMove(amd, dt);
@@ -474,7 +475,7 @@ void UnitTestPBPhysLoadSave() {
   PBPhysAddParticles(phys, 2, ShapoidTypeSpheroid);
   PBPhysParticleSetMass(PBPhysPart(phys, 1), 1.0);
   FILE* fd = fopen("./phys.txt", "w");
-  if (!PBPhysSave(phys, fd)) {
+  if (!PBPhysSave(phys, fd, false)) {
     PBPhysErr->_type = PBErrTypeUnitTestFailed;
     sprintf(PBPhysErr->_msg, "PBPhysSave failed");
     PBErrCatch(PBPhysErr);
