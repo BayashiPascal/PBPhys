@@ -471,7 +471,7 @@ PBPhys* PBPhysCreate(int dim) {
   // Allocate memory
   PBPhys* that = PBErrMalloc(PBPhysErr, sizeof(PBPhys));
   // Set properties
-  that->_dim = dim;
+  *(int*)&(that->_dim) = dim;
   that->_particles = GSetPBPhysParticleCreateStatic();
   that->_deltaT = PBPHYS_DELTAT;
   that->_downGravity = 0.0; 

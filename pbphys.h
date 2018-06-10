@@ -240,7 +240,7 @@ VecFloat3D PBPhysParticleGetDistPoly(PBPhysParticle* that,
 
 typedef struct PBPhys {
   // Dimension of space
-  int _dim;
+  const int _dim;
   // Set of particles
   GSetPBPhysParticle _particles;
   // Delta time used in Step()
