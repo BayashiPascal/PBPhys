@@ -261,8 +261,8 @@ void UnitTestPBPhysParticleAccelMove() {
   float drag = 0.1;
   PBPhysParticleSetDrag(particle, drag);
   VecFloat2D vecNull = VecFloatCreateStatic2D();
-  ShapoidSetPos(PBPhysParticleShape(particle), &vecNull);
-  VecSetNull(PBPhysParticleSpeed(particle));
+  ShapoidSetPos(particle->_shape, &vecNull);
+  PBPhysParticleSetSpeed(particle, &vecNull);
   float checkC[20] = {
     0.100000,-0.050000,0.199000,-0.099500,0.297010,-0.148505,0.394040,
     -0.197020,0.490099,-0.245050,0.585199,-0.292599,0.679347,-0.339673,
@@ -562,11 +562,13 @@ void UnitTestPBPhysStepGravity() {
   PBPhysParticleSetMass(PBPhysPart(phys, 1), 1.0);
   PBPhysParticleSetFixed(PBPhysPart(phys, 1), true);
   float check[20] = {
-    0.010018,0.005018,0.020071,0.010071,0.030160,0.015161,0.040286,
-    0.020287,0.050449,0.025452,0.060649,0.030654,0.070887,0.035896,
-    0.081164,0.041177,0.091479,0.046499,.101834,0.051862};
+    0.010018,0.005018,0.020089,0.010089,0.030249,0.015249,0.040535,
+    0.020537,0.050984,0.025988,0.061633,0.031642,0.072520,0.037538,
+    0.083684,0.043716,0.095164,0.050216,0.107000,0.057080
+    };
   for (int i = 0; i < 10; ++i) {
     PBPhysNext(phys);
+//VecFloatPrint(ShapoidPos(PBPhysParticleShape(PBPhysPart(phys, 0))), stdout, 6);printf("\n");
     VecSet(&v, 0, check[2 * i]); VecSet(&v, 1, check[2 * i + 1]);
     if (!VecIsEqual(
       ShapoidPos(PBPhysParticleShape(PBPhysPart(phys, 0))),
@@ -575,10 +577,8 @@ void UnitTestPBPhysStepGravity() {
       sprintf(PBPhysErr->_msg, "PBPhysStep failed");
       PBErrCatch(PBPhysErr);
     }
-//VecFloatPrint(ShapoidPos(PBPhysParticleShape(PBPhysPart(phys, 0))), stdout, 6);printf("\n");
   }
   PBPhysFree(&phys);
-  printf("UnitTestPBPhysStepDownGravity OK\n");
   printf("UnitTestPBPhysStepGravity OK\n");
 }
 

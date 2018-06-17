@@ -8,7 +8,7 @@
 #if BUILDMODE != 0
 inline
 #endif
-int PBPhysParticleGetDim(PBPhysParticle* that) {
+int PBPhysParticleGetDim(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -23,7 +23,7 @@ int PBPhysParticleGetDim(PBPhysParticle* that) {
 #if BUILDMODE != 0
 inline
 #endif
-ShapoidType PBPhysParticleGetShapeType(PBPhysParticle* that) {
+ShapoidType PBPhysParticleGetShapeType(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -38,7 +38,7 @@ ShapoidType PBPhysParticleGetShapeType(PBPhysParticle* that) {
 #if BUILDMODE != 0
 inline
 #endif
-Shapoid* PBPhysParticleShape(PBPhysParticle* that) {
+const Shapoid* PBPhysParticleShape(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -53,7 +53,7 @@ Shapoid* PBPhysParticleShape(PBPhysParticle* that) {
 #if BUILDMODE != 0
 inline
 #endif
-const VecFloat* PBPhysParticleAxis(PBPhysParticle* that, int iAxis) {
+const VecFloat* PBPhysParticleAxis(const PBPhysParticle* const that, const int iAxis) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -74,7 +74,7 @@ const VecFloat* PBPhysParticleAxis(PBPhysParticle* that, int iAxis) {
 #if BUILDMODE != 0
 inline
 #endif
-VecFloat* PBPhysParticleSpeed(PBPhysParticle* that) {
+const VecFloat* PBPhysParticleSpeed(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -89,7 +89,7 @@ VecFloat* PBPhysParticleSpeed(PBPhysParticle* that) {
 #if BUILDMODE != 0
 inline
 #endif
-VecFloat* PBPhysParticleAccel(PBPhysParticle* that) {
+const VecFloat* PBPhysParticleAccel(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -104,7 +104,7 @@ VecFloat* PBPhysParticleAccel(PBPhysParticle* that) {
 #if BUILDMODE != 0
 inline
 #endif
-VecFloat* PBPhysParticleSysAccel(PBPhysParticle* that) {
+const VecFloat* PBPhysParticleSysAccel(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -119,7 +119,7 @@ VecFloat* PBPhysParticleSysAccel(PBPhysParticle* that) {
 #if BUILDMODE != 0
 inline
 #endif
-VecFloat* PBPhysParticleGetPos(PBPhysParticle* that) {
+VecFloat* PBPhysParticleGetPos(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -135,7 +135,7 @@ VecFloat* PBPhysParticleGetPos(PBPhysParticle* that) {
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleSetSpeed(PBPhysParticle* that, VecFloat* speed) {
+void _PBPhysParticleSetSpeed(const PBPhysParticle* const that, const VecFloat* const speed) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -158,12 +158,72 @@ void _PBPhysParticleSetSpeed(PBPhysParticle* that, VecFloat* speed) {
     VecCopy(that->_speed, speed);
 }
 
+// Add to the speed of the particle 'that' the vector 'v' multiplied 
+// by 'c'
+// If the particle is fixed do nothing
+#if BUILDMODE != 0
+inline
+#endif
+void _PBPhysParticleAddSpeed(const PBPhysParticle* const that, const VecFloat* const v, const float c) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBPhysErr->_type = PBErrTypeNullPointer;
+    sprintf(PBPhysErr->_msg, "'that' is null");
+    PBErrCatch(PBPhysErr);
+  }
+  if (v == NULL) {
+    PBPhysErr->_type = PBErrTypeNullPointer;
+    sprintf(PBPhysErr->_msg, "'v' is null");
+    PBErrCatch(PBPhysErr);
+  }
+  if (VecGetDim(v) != PBPhysParticleGetDim(that)) {
+    PBPhysErr->_type = PBErrTypeNullPointer;
+    sprintf(PBPhysErr->_msg, "'v' 's dimension is invalid (%d=%d)",
+      VecGetDim(v), PBPhysParticleGetDim(that));
+    PBErrCatch(PBPhysErr);
+  }
+#endif
+  if (!PBPhysParticleIsFixed(that))
+    VecOp(that->_speed, 1.0, v, c);
+}
+
+// Add to the system accel of the particle 'that' the vector 'v' 
+// multiplied by 'c'
+// If the particle is fixed do nothing
+#if BUILDMODE != 0
+inline
+#endif
+void _PBPhysParticleAddSysAccel(const PBPhysParticle* const that, const VecFloat* const v, const float c) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBPhysErr->_type = PBErrTypeNullPointer;
+    sprintf(PBPhysErr->_msg, "'that' is null");
+    PBErrCatch(PBPhysErr);
+  }
+  if (v == NULL) {
+    PBPhysErr->_type = PBErrTypeNullPointer;
+    sprintf(PBPhysErr->_msg, "'v' is null");
+    PBErrCatch(PBPhysErr);
+  }
+  if (VecGetDim(v) != PBPhysParticleGetDim(that)) {
+    PBPhysErr->_type = PBErrTypeNullPointer;
+    sprintf(PBPhysErr->_msg, "'v' 's dimension is invalid (%d=%d)",
+      VecGetDim(v), PBPhysParticleGetDim(that));
+    PBErrCatch(PBPhysErr);
+  }
+#endif
+  if (!PBPhysParticleIsFixed(that))
+    VecOp(that->_sysAccel, 1.0, v, c);
+}
+
+
+
 // Set the acceleration of the particle 'that' to 'accel'
 // If the particle is fixed do nothing
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleSetAccel(PBPhysParticle* that, VecFloat* accel) {
+void _PBPhysParticleSetAccel(PBPhysParticle* const that, const VecFloat* const accel) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -186,11 +246,44 @@ void _PBPhysParticleSetAccel(PBPhysParticle* that, VecFloat* accel) {
     VecCopy(that->_accel, accel);
 }
 
+// Reset the system acceleration of the particle 'that'
+#if BUILDMODE != 0
+inline
+#endif
+void PBPhysParticleResetSysAccel(PBPhysParticle* const that) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBPhysErr->_type = PBErrTypeNullPointer;
+    sprintf(PBPhysErr->_msg, "'that' is null");
+    PBErrCatch(PBPhysErr);
+  }
+#endif
+  VecSetNull(that->_accel);
+}
+
+// Add the gravity force 'gravity' to the system acceleration of the 
+// particle 'that' (substract 'gravity' to the axis y)
+// If the particle is fixed do nothing
+#if BUILDMODE != 0
+inline
+#endif
+void PBPhysParticleApplyGravity(PBPhysParticle* const that, float gravity) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBPhysErr->_type = PBErrTypeNullPointer;
+    sprintf(PBPhysErr->_msg, "'that' is null");
+    PBErrCatch(PBPhysErr);
+  }
+#endif
+  if (!PBPhysParticleIsFixed(that))
+    VecSetAdd(that->_accel, 1, -1.0 * gravity);
+}
+
 // Set the position of the center of the particle 'that' to 'pos'
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleSetPos(PBPhysParticle* that, VecFloat* pos) {
+void _PBPhysParticleSetPos(PBPhysParticle* const that, const VecFloat* const pos) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -209,7 +302,36 @@ void _PBPhysParticleSetPos(PBPhysParticle* that, VecFloat* pos) {
     PBErrCatch(PBPhysErr);
   }
 #endif
-  ShapoidSetCenterPos(PBPhysParticleShape(that), pos);
+  ShapoidSetCenterPos(that->_shape, pos);
+}
+
+// Add to the position of the center of the particle 'that' the vector 'v' multiplied by 'c'
+#if BUILDMODE != 0
+inline
+#endif
+void _PBPhysParticleAddPos(PBPhysParticle* const that, const VecFloat* const v, const float c) {
+#if BUILDMODE == 0
+  if (that == NULL) {
+    PBPhysErr->_type = PBErrTypeNullPointer;
+    sprintf(PBPhysErr->_msg, "'that' is null");
+    PBErrCatch(PBPhysErr);
+  }
+  if (v == NULL) {
+    PBPhysErr->_type = PBErrTypeNullPointer;
+    sprintf(PBPhysErr->_msg, "'v' is null");
+    PBErrCatch(PBPhysErr);
+  }
+  if (VecGetDim(v) != PBPhysParticleGetDim(that)) {
+    PBPhysErr->_type = PBErrTypeNullPointer;
+    sprintf(PBPhysErr->_msg, "'v' 's dimension is invalid (%d=%d)",
+      VecGetDim(v), PBPhysParticleGetDim(that));
+    PBErrCatch(PBPhysErr);
+  }
+#endif
+  VecFloat* pos = ShapoidGetCenter(PBPhysParticleShape(that));
+  VecOp(pos, 1.0, v, c);
+  ShapoidSetCenterPos(that->_shape, pos);
+  VecFree(&pos);
 }
 
 // Return true if the particle 'that' is the same is the particle 'tho'
@@ -218,7 +340,7 @@ void _PBPhysParticleSetPos(PBPhysParticle* that, VecFloat* pos) {
 #if BUILDMODE != 0
 inline
 #endif
-bool PBPhysParticleIsSame(PBPhysParticle* that, PBPhysParticle* tho) {
+bool PBPhysParticleIsSame(const PBPhysParticle* const that, const PBPhysParticle* const tho) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -245,7 +367,7 @@ bool PBPhysParticleIsSame(PBPhysParticle* that, PBPhysParticle* tho) {
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleSetSizeVec(PBPhysParticle* that, VecFloat* size) {
+void _PBPhysParticleSetSizeVec(PBPhysParticle* const that, const VecFloat* const size) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -267,14 +389,14 @@ void _PBPhysParticleSetSizeVec(PBPhysParticle* that, VecFloat* size) {
   for (int iAxis = PBPhysParticleGetDim(that); iAxis--;) {
     float scale = VecGet(size, iAxis) / 
       VecNorm(ShapoidAxis(PBPhysParticleShape(that), iAxis));
-    ShapoidAxisScale(PBPhysParticleShape(that), iAxis, scale);
+    ShapoidAxisScale(that->_shape, iAxis, scale);
   }
 }
 
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleSetSizeScalar(PBPhysParticle* that, float size) {
+void _PBPhysParticleSetSizeScalar(PBPhysParticle* const that, const float size) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -285,7 +407,7 @@ void _PBPhysParticleSetSizeScalar(PBPhysParticle* that, float size) {
   for (int iAxis = PBPhysParticleGetDim(that); iAxis--;) {
     float scale = size / 
       VecNorm(ShapoidAxis(PBPhysParticleShape(that), iAxis));
-    ShapoidAxisScale(PBPhysParticleShape(that), iAxis, scale);
+    ShapoidAxisScale(that->_shape, iAxis, scale);
   }
 }
 
@@ -293,7 +415,7 @@ void _PBPhysParticleSetSizeScalar(PBPhysParticle* that, float size) {
 #if BUILDMODE != 0
 inline
 #endif
-float PBPhysParticleGetMass(PBPhysParticle* that) {
+float PBPhysParticleGetMass(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -308,7 +430,7 @@ float PBPhysParticleGetMass(PBPhysParticle* that) {
 #if BUILDMODE != 0
 inline
 #endif
-void PBPhysParticleSetMass(PBPhysParticle* that, float mass) {
+void PBPhysParticleSetMass(PBPhysParticle* const that, const float mass) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -323,7 +445,7 @@ void PBPhysParticleSetMass(PBPhysParticle* that, float mass) {
 #if BUILDMODE != 0
 inline
 #endif
-float PBPhysParticleGetDrag(PBPhysParticle* that) {
+float PBPhysParticleGetDrag(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -338,7 +460,7 @@ float PBPhysParticleGetDrag(PBPhysParticle* that) {
 #if BUILDMODE != 0
 inline
 #endif
-void PBPhysParticleSetDrag(PBPhysParticle* that, float drag) {
+void PBPhysParticleSetDrag(PBPhysParticle* const that, const float drag) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -354,7 +476,7 @@ void PBPhysParticleSetDrag(PBPhysParticle* that, float drag) {
 #if BUILDMODE != 0
 inline
 #endif
-bool PBPhysParticleIsFixed(PBPhysParticle* that) {
+bool PBPhysParticleIsFixed(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -369,7 +491,7 @@ bool PBPhysParticleIsFixed(PBPhysParticle* that) {
 #if BUILDMODE != 0
 inline
 #endif
-void PBPhysParticleSetFixed(PBPhysParticle* that, bool fixed) {
+void PBPhysParticleSetFixed(PBPhysParticle* const that, const bool fixed) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -388,7 +510,7 @@ void PBPhysParticleSetFixed(PBPhysParticle* that, bool fixed) {
 #if BUILDMODE != 0
 inline
 #endif
-void PBPhysParticleSetData(PBPhysParticle* that, void* data) {
+void PBPhysParticleSetData(PBPhysParticle* const that, void* const data) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -403,7 +525,7 @@ void PBPhysParticleSetData(PBPhysParticle* that, void* data) {
 #if BUILDMODE != 0
 inline
 #endif
-void* PBPhysParticleData(PBPhysParticle* that) {
+void* PBPhysParticleData(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -422,7 +544,7 @@ void* PBPhysParticleData(PBPhysParticle* that) {
 #if BUILDMODE != 0
 inline
 #endif
-int PBPhysGetDim(PBPhys* that) {
+int PBPhysGetDim(const PBPhys* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -437,7 +559,7 @@ int PBPhysGetDim(PBPhys* that) {
 #if BUILDMODE != 0
 inline
 #endif
-GSetPBPhysParticle* PBPhysParticles(PBPhys* that) {
+GSetPBPhysParticle* PBPhysParticles(const PBPhys* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -445,14 +567,14 @@ GSetPBPhysParticle* PBPhysParticles(PBPhys* that) {
     PBErrCatch(PBPhysErr);
   }
 #endif
-  return &(that->_particles);
+  return (GSetPBPhysParticle*)&(that->_particles);
 }
 
 // Return the delta t of the PBPhys 'that'
 #if BUILDMODE != 0
 inline
 #endif
-float PBPhysGetDeltaT(PBPhys* that) {
+float PBPhysGetDeltaT(const PBPhys* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -467,7 +589,7 @@ float PBPhysGetDeltaT(PBPhys* that) {
 #if BUILDMODE != 0
 inline
 #endif
-float PBPhysGetCurTime(PBPhys* that) {
+float PBPhysGetCurTime(const PBPhys* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -482,7 +604,7 @@ float PBPhysGetCurTime(PBPhys* that) {
 #if BUILDMODE != 0
 inline
 #endif
-float PBPhysGetDownGravity(PBPhys* that) {
+float PBPhysGetDownGravity(const PBPhys* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -497,7 +619,7 @@ float PBPhysGetDownGravity(PBPhys* that) {
 #if BUILDMODE != 0
 inline
 #endif
-float PBPhysGetGravity(PBPhys* that) {
+float PBPhysGetGravity(const PBPhys* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -512,7 +634,7 @@ float PBPhysGetGravity(PBPhys* that) {
 #if BUILDMODE != 0
 inline
 #endif
-void PBPhysSetDeltaT(PBPhys* that, float deltaT) {
+void PBPhysSetDeltaT(PBPhys* const that, const float deltaT) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -527,7 +649,7 @@ void PBPhysSetDeltaT(PBPhys* that, float deltaT) {
 #if BUILDMODE != 0
 inline
 #endif
-void PBPhysSetCurTime(PBPhys* that, float t) {
+void PBPhysSetCurTime(PBPhys* const that, const float t) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -542,7 +664,7 @@ void PBPhysSetCurTime(PBPhys* that, float t) {
 #if BUILDMODE != 0
 inline
 #endif
-void PBPhysSetDownGravity(PBPhys* that, float gravity) {
+void PBPhysSetDownGravity(PBPhys* const that, float gravity) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -558,7 +680,7 @@ void PBPhysSetDownGravity(PBPhys* that, float gravity) {
 #if BUILDMODE != 0
 inline
 #endif
-void PBPhysSetGravity(PBPhys* that, float gravity) {
+void PBPhysSetGravity(PBPhys* const that, float gravity) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -573,7 +695,7 @@ void PBPhysSetGravity(PBPhys* that, float gravity) {
 #if BUILDMODE != 0
 inline
 #endif
-PBPhysParticle* PBPhysPart(PBPhys* that, int iParticle) {
+PBPhysParticle* PBPhysPart(const PBPhys* const that, const int iParticle) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -594,7 +716,7 @@ PBPhysParticle* PBPhysPart(PBPhys* that, int iParticle) {
 #if BUILDMODE != 0
 inline
 #endif
-int PBPhysGetNbParticle(PBPhys* that) {
+int PBPhysGetNbParticle(const PBPhys* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -609,7 +731,7 @@ int PBPhysGetNbParticle(PBPhys* that) {
 #if BUILDMODE != 0
 inline
 #endif
-void PBPhysAddParticles(PBPhys* that, int nb, ShapoidType shape) {
+void PBPhysAddParticles(PBPhys* const that, const int nb, const ShapoidType shape) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;

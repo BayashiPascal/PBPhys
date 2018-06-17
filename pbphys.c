@@ -13,22 +13,22 @@
 
 // Return the displacement of the particle from current position to 
 // the position after dt
-VecFloat* PBPhysParticleGetNextDisplacement(PBPhysParticle* that, 
-  float dt);
+VecFloat* PBPhysParticleGetNextDisplacement(const PBPhysParticle* const that, 
+  const float dt);
 
 // Return the coefficients of the polynom describing the square of the 
 // distance between two lines passing through 'posA' and 'posB' and 
 // colinear to 'dirA' and 'dirB' respectively
 // Return a vector such as dist^2(t)=v[0]+v[1]t+v[2]t^2
-VecFloat3D PBPhysGetDistPoly(VecFloat* posA, VecFloat* dirA,
-  VecFloat* posB, VecFloat* dirB);
+VecFloat3D PBPhysGetDistPoly(const VecFloat* const posA, const VecFloat* const dirA,
+  const VecFloat* const posB, const VecFloat* const dirB);
   
 // ================ Functions implementation ====================
 
 // Create a new PBPhysParticle with dimension 'dim' and a 'shapeType'
 // shapoid as shape 
 // Default values: _mass = 0.0, _drag = 0.0, _fixed = false
-PBPhysParticle* PBPhysParticleCreate(int dim, ShapoidType shapeType) {
+PBPhysParticle* PBPhysParticleCreate(const int dim, const ShapoidType shapeType) {
 #if BUILDMODE == 0
   if (dim <= 0) {
     PBPhysErr->_type = PBErrTypeInvalidArg;
@@ -67,7 +67,7 @@ void PBPhysParticleFree(PBPhysParticle** that) {
 }
 
 // Return a clone of the particle 'that'
-PBPhysParticle* PBPhysParticleClone(PBPhysParticle* that) {
+PBPhysParticle* PBPhysParticleClone(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -93,7 +93,7 @@ PBPhysParticle* PBPhysParticleClone(PBPhysParticle* that) {
 }
 
 // Print the particle 'that' on the stream 'stream'
-void PBPhysParticlePrintln(PBPhysParticle* that, FILE* stream) {
+void PBPhysParticlePrintln(const PBPhysParticle* const that, FILE* const stream) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -123,7 +123,7 @@ void PBPhysParticlePrintln(PBPhysParticle* that, FILE* stream) {
 }
 
 // Function which return the JSON encoding of 'that' 
-JSONNode* PBPhysParticleEncodeAsJSON(PBPhysParticle* that) {
+JSONNode* PBPhysParticleEncodeAsJSON(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBMathErr->_type = PBErrTypeNullPointer;
@@ -164,7 +164,7 @@ JSONNode* PBPhysParticleEncodeAsJSON(PBPhysParticle* that) {
 }
 
 // Function which decode from JSON encoding 'json' to 'that'
-bool PBPhysParticleDecodeAsJSON(PBPhysParticle** that, JSONNode* json) {
+bool PBPhysParticleDecodeAsJSON(PBPhysParticle** that, const JSONNode* const json) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBMathErr->_type = PBErrTypeNullPointer;
@@ -250,8 +250,8 @@ bool PBPhysParticleDecodeAsJSON(PBPhysParticle** that, JSONNode* json) {
 // Return true if we could save the particle
 // Return false else
 // If user data is attached to the particle it must be saved by the user
-bool PBPhysParticleSave(PBPhysParticle* that, FILE* stream, 
-  bool compact) {
+bool PBPhysParticleSave(const PBPhysParticle* const that, FILE* const stream, 
+  const bool compact) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -280,7 +280,7 @@ bool PBPhysParticleSave(PBPhysParticle* that, FILE* stream,
 // Return true if we could load the particle
 // Return false else
 // If user data is attached to the particle it must be loaded by the user
-bool PBPhysParticleLoad(PBPhysParticle** that, FILE* stream) {
+bool PBPhysParticleLoad(PBPhysParticle** that, FILE* const stream) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -312,7 +312,7 @@ bool PBPhysParticleLoad(PBPhysParticle** that, FILE* stream) {
 // Move the particle 'that' over a period of time 'dt'
 // x(t+dt) = x(t) + v(t)*dt + 0.5*(a(t)-drag*v(t))*dt^2
 // v(t+dt) = v(t) + (a(t)-drag*v(t))*dt
-void PBPhysParticleMove(PBPhysParticle* that, float dt) {
+void PBPhysParticleMove(PBPhysParticle* const that, const float dt) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -324,26 +324,23 @@ void PBPhysParticleMove(PBPhysParticle* that, float dt) {
     // Get the displacement
     VecFloat* disp = PBPhysParticleGetNextDisplacement(that, dt);
     // Update the position
-    VecFloat* newPos = VecGetOp(
+    VecFloat* v = VecGetOp(
       ShapoidPos(PBPhysParticleShape(that)), 1.0, disp, 1.0);
-    ShapoidSetPos(PBPhysParticleShape(that), newPos);
-    VecFree(&newPos);
-    // Update the speed
-    VecOp(PBPhysParticleSpeed(that), 1.0, 
-      PBPhysParticleSpeed(that), -dt * PBPhysParticleGetDrag(that));
-    VecOp(PBPhysParticleSpeed(that), 1.0, 
-      PBPhysParticleAccel(that), dt);
-    VecOp(PBPhysParticleSpeed(that), 1.0, 
-      PBPhysParticleSysAccel(that), dt);
-    // Free memory
+    PBPhysParticleSetPos(that, v);
+    VecFree(&v);
     VecFree(&disp);
+    // Update the speed
+    PBPhysParticleAddSpeed(that, 
+      PBPhysParticleSpeed(that), -dt * PBPhysParticleGetDrag(that));
+    PBPhysParticleAddSpeed(that, PBPhysParticleAccel(that), dt);
+    PBPhysParticleAddSpeed(that, PBPhysParticleSysAccel(that), dt);
   }
 }
 
 // Return the displacement of the particle from current position to 
 // the position after dt
-VecFloat* PBPhysParticleGetNextDisplacement(PBPhysParticle* that, 
-  float dt) {
+VecFloat* PBPhysParticleGetNextDisplacement(const PBPhysParticle* const that, 
+  const float dt) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -361,8 +358,8 @@ VecFloat* PBPhysParticleGetNextDisplacement(PBPhysParticle* that,
 // Correct the current speed of the two colliding particles 'that' and 
 // 'tho' under the hypothesis of elastic collision
 // Particles' mass must not be null
-void PBPhysParticleApplyElasticCollision(PBPhysParticle* that, 
-  PBPhysParticle* tho) {
+void PBPhysParticleApplyElasticCollision(PBPhysParticle* const that, 
+  PBPhysParticle* const tho) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -403,11 +400,11 @@ void PBPhysParticleApplyElasticCollision(PBPhysParticle* that,
     fsquare(norm));
   // Update the speed of 'that' if it's not fixed
   if (!PBPhysParticleIsFixed(that))
-    VecOp(PBPhysParticleSpeed(that), 1.0, v, 
+    PBPhysParticleAddSpeed(that, v, 
       -1.0 * c * PBPhysParticleGetMass(tho));
   // Update the speed of 'tho' if it's not fixed
   if (!PBPhysParticleIsFixed(tho))
-    VecOp(PBPhysParticleSpeed(tho), 1.0, v, 
+    PBPhysParticleAddSpeed(tho, v, 
       c * PBPhysParticleGetMass(that));
   // Free memory
   VecFree(&posA);
@@ -419,8 +416,8 @@ void PBPhysParticleApplyElasticCollision(PBPhysParticle* that,
 // Return the coefficients of the polynom describing the square of the 
 // distance between particles 'that' and 'tho'
 // Return a vector such as dist^2(t)=v[0]+v[1]t+v[2]t^2
-VecFloat3D PBPhysParticleGetDistPoly(PBPhysParticle* that, 
-  PBPhysParticle* tho) {
+VecFloat3D PBPhysParticleGetDistPoly(const PBPhysParticle* const that, 
+  const PBPhysParticle* const tho) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -448,7 +445,7 @@ VecFloat3D PBPhysParticleGetDistPoly(PBPhysParticle* that,
 
 // Calculate the system acceleration of the particle 'part' in the 
 // PBPhys 'that'
-void PBPhysUpdateSysAccel(PBPhys* that, PBPhysParticle* part);
+void PBPhysUpdateSysAccel(const PBPhys* const that, PBPhysParticle* const part);
 
 // Return the time to collision between two particles of radius 'rA' 
 // and 'rB' and the polynom of the square distance between particles 
@@ -460,7 +457,7 @@ float PBPhysGetTimeToHit(float rA, float rB, VecFloat3D* distPoly);
 // Create a new PBPhys for space dimension 'dim'
 // Default values: _deltaT = 0.01, _downGravity = 0.0, _gravity = 0.0,
 // _curTime = 0.0
-PBPhys* PBPhysCreate(int dim) {
+PBPhys* PBPhysCreate(const int dim) {
 #if BUILDMODE == 0
   if (dim <= 0) {
     PBPhysErr->_type = PBErrTypeInvalidArg;
@@ -497,7 +494,7 @@ void PBPhysFree(PBPhys** that) {
 }
 
 // Return a clone of the PBPhys 'that'
-PBPhys* PBPhysClone(PBPhys* that) {
+PBPhys* PBPhysClone(const PBPhys* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -527,7 +524,7 @@ PBPhys* PBPhysClone(PBPhys* that) {
 }
 
 // Print the PBPhys 'that' on the stream 'stream'
-void PBPhysPrintln(PBPhys* that, FILE* stream) {
+void PBPhysPrintln(const PBPhys* const that, FILE* const stream) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -560,7 +557,7 @@ void PBPhysPrintln(PBPhys* that, FILE* stream) {
 }
 
 // Function which return the JSON encoding of 'that' 
-JSONNode* PBPhysEncodeAsJSON(PBPhys* that) {
+JSONNode* PBPhysEncodeAsJSON(const PBPhys* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBMathErr->_type = PBErrTypeNullPointer;
@@ -612,7 +609,7 @@ JSONNode* PBPhysEncodeAsJSON(PBPhys* that) {
 }
 
 // Function which decode from JSON encoding 'json' to 'that'
-bool PBPhysDecodeAsJSON(PBPhys** that, JSONNode* json) {
+bool PBPhysDecodeAsJSON(PBPhys** that, const JSONNode* const json) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBMathErr->_type = PBErrTypeNullPointer;
@@ -694,7 +691,7 @@ bool PBPhysDecodeAsJSON(PBPhys** that, JSONNode* json) {
 // readable form
 // Return true if we could save the PBPhys
 // Return false else
-bool PBPhysSave(PBPhys* that, FILE* stream, bool compact) {
+bool PBPhysSave(const PBPhys* const that, FILE* const stream, const bool compact) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -722,7 +719,7 @@ bool PBPhysSave(PBPhys* that, FILE* stream, bool compact) {
 // Load the PBPhys 'that' from the stream 'stream'
 // Return true if we could load the PBPhys
 // Return false else
-bool PBPhysLoad(PBPhys** that, FILE* stream) {
+bool PBPhysLoad(PBPhys** that, FILE* const stream) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -752,7 +749,7 @@ bool PBPhysLoad(PBPhys** that, FILE* stream) {
 }
 
 // Step the PBPhys 'that' by that->_deltaT ignoring collision
-void PBPhysNext(PBPhys* that) {
+void PBPhysNext(PBPhys* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -779,7 +776,7 @@ void PBPhysNext(PBPhys* that) {
 
 // Calculate the system acceleration of the particle 'part' in the 
 // PBPhys 'that'
-void PBPhysUpdateSysAccel(PBPhys* that, PBPhysParticle* particle) {
+void PBPhysUpdateSysAccel(const PBPhys* const that, PBPhysParticle* particle) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -792,17 +789,16 @@ void PBPhysUpdateSysAccel(PBPhys* that, PBPhysParticle* particle) {
     PBErrCatch(PBPhysErr);
   }
 #endif
+  // Reset the system acceleration
+  PBPhysParticleResetSysAccel(particle);
   // If the particle is fixed there is nothing to do
   if (PBPhysParticleIsFixed(particle))
     return;
-  // Reset the system acceleration
-  VecSetNull(PBPhysParticleSysAccel(particle));
   // If the down gravity is active
   if (fabs(PBPhysGetDownGravity(that)) > PBMATH_EPSILON) {
     // Substract the down gravity to the y axis of the system 
     // acceleration
-    VecSet(PBPhysParticleSysAccel(particle), 1, 
-      -1.0 * PBPhysGetDownGravity(that));
+    PBPhysParticleApplyGravity(particle, PBPhysGetDownGravity(that));
   }
   // If the gravity is active
   if (fabs(PBPhysGetGravity(that)) > PBMATH_EPSILON) {
@@ -826,7 +822,7 @@ void PBPhysUpdateSysAccel(PBPhys* that, PBPhysParticle* particle) {
           // Apply the attraction toward the other particle
           VecOp(centerPart, 1.0, centerParticle, -1.0);
           VecNormalise(centerPart);
-          VecOp(PBPhysParticleSysAccel(particle), 1.0, centerPart, mag);
+          PBPhysParticleAddSysAccel(particle, centerPart, mag);
         }
         // Free memory
         VecFree(&centerPart);
@@ -838,7 +834,7 @@ void PBPhysUpdateSysAccel(PBPhys* that, PBPhysParticle* particle) {
 }
 
 // Step the PBPhys 'that' by that->_deltaT managing collision(s)
-void PBPhysStep(PBPhys* that) {
+void PBPhysStep(PBPhys* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -852,19 +848,15 @@ void PBPhysStep(PBPhys* that) {
   float origDeltaT = PBPhysGetDeltaT(that);
   // Loop until we reach the goal time
   while (PBPhysGetCurTime(that) < goalT) {
-//printf("curt %f goalt %f\n", PBPhysGetCurTime(that), goalT);
     // Step until next collision
     GSetPBPhysParticle* set = PBPhysStepToCollision(that);
-//printf("curt %f goalt %f\n", PBPhysGetCurTime(that), goalT);
     // If there has been collision
     if (set != NULL) {
-//printf("hit\n");
       // Manage the collision
       PBPhysParticleApplyElasticCollision(
         GSetGet(set, 0), GSetGet(set, 1));
       // Correct the deltat to reach the initial goal time
       PBPhysSetDeltaT(that, goalT - PBPhysGetCurTime(that));
-//printf("deltat %f\n", PBPhysGetDeltaT(that));
       // Free the set
       GSetFree(&set);
     }
@@ -878,7 +870,7 @@ void PBPhysStep(PBPhys* that) {
 // If a collision occured one can check the collision time with the 
 // current time that->_curTime, and the returned GSet contains the 
 // particles wich have collided
-GSetPBPhysParticle* PBPhysStepToCollision(PBPhys* that) {
+GSetPBPhysParticle* PBPhysStepToCollision(PBPhys* const that) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -1000,8 +992,8 @@ float PBPhysGetTimeToHit(float rA, float rB, VecFloat3D* distPoly) {
 // distance between two lines passing through 'posA' and 'posB' and 
 // colinear to 'dirA' and 'dirB' respectively
 // Return a vector such as dist^2(t)=v[0]+v[1]t+v[2]t^2
-VecFloat3D PBPhysGetDistPoly(VecFloat* posA, VecFloat* dirA,
-  VecFloat* posB, VecFloat* dirB) {
+VecFloat3D PBPhysGetDistPoly(const VecFloat* const posA, const VecFloat* const dirA,
+  const VecFloat* const posB, const VecFloat* const dirB) {
 #if BUILDMODE == 0
   if (posA == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
@@ -1042,7 +1034,7 @@ VecFloat3D PBPhysGetDistPoly(VecFloat* posA, VecFloat* dirA,
 }
 
 // Return true if the PBPhys 'that' is the same as PBPhys 'tho'
-bool PBPhysIsSame(PBPhys* that, PBPhys* tho) {
+bool PBPhysIsSame(const PBPhys* const that, const PBPhys* const tho) {
 #if BUILDMODE == 0
   if (that == NULL) {
     PBPhysErr->_type = PBErrTypeNullPointer;
