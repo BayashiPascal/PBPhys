@@ -568,7 +568,6 @@ void UnitTestPBPhysStepGravity() {
     };
   for (int i = 0; i < 10; ++i) {
     PBPhysNext(phys);
-//VecFloatPrint(ShapoidPos(PBPhysParticleShape(PBPhysPart(phys, 0))), stdout, 6);printf("\n");
     VecSet(&v, 0, check[2 * i]); VecSet(&v, 1, check[2 * i + 1]);
     if (!VecIsEqual(
       ShapoidPos(PBPhysParticleShape(PBPhysPart(phys, 0))),

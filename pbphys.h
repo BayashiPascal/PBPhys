@@ -43,7 +43,8 @@ typedef struct PBPhysParticle {
 // Create a new PBPhysParticle with dimension 'dim' and a 'shapeType'
 // shapoid as shape 
 // Default values: _mass = 0.0, _drag = 0.0, _fixed = false
-PBPhysParticle* PBPhysParticleCreate(const int dim, const ShapoidType shapeType);
+PBPhysParticle* PBPhysParticleCreate(const int dim, 
+  const ShapoidType shapeType);
 
 // Free the memory used by the particle 'that'
 void PBPhysParticleFree(PBPhysParticle** that);
@@ -52,13 +53,15 @@ void PBPhysParticleFree(PBPhysParticle** that);
 PBPhysParticle* PBPhysParticleClone(const PBPhysParticle* const that);
 
 // Print the particle 'that' on the stream 'stream'
-void PBPhysParticlePrintln(const PBPhysParticle* const that, FILE* const stream);
+void PBPhysParticlePrintln(const PBPhysParticle* const that, 
+  FILE* const stream);
 
 // Function which return the JSON encoding of 'that' 
 JSONNode* PBPhysParticleEncodeAsJSON(const PBPhysParticle* const that);
 
 // Function which decode from JSON encoding 'json' to 'that'
-bool PBPhysParticleDecodeAsJSON(PBPhysParticle** that, const JSONNode* const json);
+bool PBPhysParticleDecodeAsJSON(PBPhysParticle** that, 
+  const JSONNode* const json);
 
 // Save the particle 'that' on the stream 'stream'
 // If 'compact' equals true it saves in compact form, else it saves in 
@@ -66,8 +69,8 @@ bool PBPhysParticleDecodeAsJSON(PBPhysParticle** that, const JSONNode* const jso
 // Return true if we could save the particle
 // Return false else
 // If user data is attached to the particle it must be saved by the user
-bool PBPhysParticleSave(const PBPhysParticle* const that, FILE* const stream, 
-  const bool compact); 
+bool PBPhysParticleSave(const PBPhysParticle* const that, 
+  FILE* const stream, const bool compact); 
 
 // Load the particle 'that' from the stream 'stream'
 // Return true if we could load the particle
@@ -97,7 +100,8 @@ const Shapoid* PBPhysParticleShape(const PBPhysParticle* const that);
 #if BUILDMODE != 0
 inline
 #endif
-const VecFloat* PBPhysParticleAxis(const PBPhysParticle* const that, const int iAxis);
+const VecFloat* PBPhysParticleAxis(const PBPhysParticle* const that, 
+  const int iAxis);
 
 // Return the speed of the particle 'that'
 #if BUILDMODE != 0
@@ -128,7 +132,8 @@ VecFloat* PBPhysParticleGetPos(const PBPhysParticle* const that);
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleSetSpeed(const PBPhysParticle* const that, const VecFloat* const speed);
+void _PBPhysParticleSetSpeed(const PBPhysParticle* const that, 
+  const VecFloat* const speed);
 
 // Add to the speed of the particle 'that' the vector 'v' multiplied 
 // by 'c'
@@ -136,7 +141,8 @@ void _PBPhysParticleSetSpeed(const PBPhysParticle* const that, const VecFloat* c
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleAddSpeed(const PBPhysParticle* const that, const VecFloat* const v, const float c);
+void _PBPhysParticleAddSpeed(const PBPhysParticle* const that, 
+  const VecFloat* const v, const float c);
 
 // Add to the system accel of the particle 'that' the vector 'v' 
 // multiplied by 'c'
@@ -144,14 +150,16 @@ void _PBPhysParticleAddSpeed(const PBPhysParticle* const that, const VecFloat* c
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleAddSysAccel(const PBPhysParticle* const that, const VecFloat* const v, const float c);
+void _PBPhysParticleAddSysAccel(const PBPhysParticle* const that, 
+  const VecFloat* const v, const float c);
 
 // Set the acceleration of the particle 'that' to 'accel'
 // If the particle is fixed do nothing
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleSetAccel(PBPhysParticle* const that, const VecFloat* const accel);
+void _PBPhysParticleSetAccel(PBPhysParticle* const that, 
+  const VecFloat* const accel);
 
 // Reset the system acceleration of the particle 'that'
 #if BUILDMODE != 0
@@ -165,19 +173,23 @@ void PBPhysParticleResetSysAccel(PBPhysParticle* const that);
 #if BUILDMODE != 0
 inline
 #endif
-void PBPhysParticleApplyGravity(PBPhysParticle* const that, float gravity);
+void PBPhysParticleApplyGravity(PBPhysParticle* const that, 
+  const float gravity);
 
 // Set the position of the center of the particle 'that' to 'pos'
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleSetPos(PBPhysParticle* const that, const VecFloat* const pos);
+void _PBPhysParticleSetPos(PBPhysParticle* const that, 
+  const VecFloat* const pos);
 
-// Add to the position of the center of the particle 'that' the vector 'v' multiplied by 'c'
+// Add to the position of the center of the particle 'that' the vector 
+// 'v' multiplied by 'c'
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleAddPos(PBPhysParticle* const that, const VecFloat* const v, const float c);
+void _PBPhysParticleAddPos(PBPhysParticle* const that, 
+  const VecFloat* const v, const float c);
 
 // Return true if the particle 'that' is the same is the particle 'tho'
 // Return false else
@@ -185,17 +197,20 @@ void _PBPhysParticleAddPos(PBPhysParticle* const that, const VecFloat* const v, 
 #if BUILDMODE != 0
 inline
 #endif
-bool PBPhysParticleIsSame(const PBPhysParticle* const that, const PBPhysParticle* const tho);
+bool PBPhysParticleIsSame(const PBPhysParticle* const that, 
+  const PBPhysParticle* const tho);
 
 // Set the shape size of the particle 'that' to 'size'
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleSetSizeVec(PBPhysParticle* const that, const VecFloat* const size);
+void _PBPhysParticleSetSizeVec(PBPhysParticle* const that, 
+  const VecFloat* const size);
 #if BUILDMODE != 0
 inline
 #endif
-void _PBPhysParticleSetSizeScalar(PBPhysParticle* const that, const float size);
+void _PBPhysParticleSetSizeScalar(PBPhysParticle* const that, 
+  const float size);
 
 // Return the mass of the particle 'that'
 #if BUILDMODE != 0
@@ -237,7 +252,8 @@ bool PBPhysParticleIsFixed(const PBPhysParticle* const that);
 #if BUILDMODE != 0
 inline
 #endif
-void PBPhysParticleSetFixed(PBPhysParticle* const that, const bool fixed);
+void PBPhysParticleSetFixed(PBPhysParticle* const that, 
+  const bool fixed);
 
 // Set the user data of the particle 'that' to 'data'
 #if BUILDMODE != 0
@@ -316,7 +332,8 @@ bool PBPhysDecodeAsJSON(PBPhys** that, const JSONNode* const json);
 // readable form
 // Return true if we could save the PBPhys
 // Return false else
-bool PBPhysSave(const PBPhys* const that, FILE* const stream, const bool compact); 
+bool PBPhysSave(const PBPhys* const that, FILE* const stream, 
+  const bool compact); 
 
 // Load the PBPhys 'that' from the stream 'stream'
 // Return true if we could load the PBPhys
@@ -404,7 +421,8 @@ GSetPBPhysParticle* PBPhysStepToCollision(PBPhys* const that);
 #if BUILDMODE != 0
 inline
 #endif
-PBPhysParticle* PBPhysPart(const PBPhys* const that, const int iParticle);
+PBPhysParticle* PBPhysPart(const PBPhys* const that, 
+  const int iParticle);
 
 // Get the number of particles of the PBPhys 'that'
 #if BUILDMODE != 0
@@ -416,7 +434,8 @@ int PBPhysGetNbParticle(const PBPhys* const that);
 #if BUILDMODE != 0
 inline
 #endif
-void PBPhysAddParticles(PBPhys* const that, const int nb, const ShapoidType shape);
+void PBPhysAddParticles(PBPhys* const that, const int nb, 
+  const ShapoidType shape);
 
 // ================= Polymorphism ==================
 
@@ -427,7 +446,8 @@ void PBPhysAddParticles(PBPhys* const that, const int nb, const ShapoidType shap
   const VecFloat*: _PBPhysParticleSetAccel, \
   const VecFloat2D*: _PBPhysParticleSetAccel, \
   const VecFloat3D*: _PBPhysParticleSetAccel, \
-  default: PBErrInvalidPolymorphism)(Particle, (const VecFloat* const)(Accel))
+  default: PBErrInvalidPolymorphism)(Particle, \
+    (const VecFloat* const)(Accel))
 
 #define PBPhysParticleSetSpeed(Particle, Speed) _Generic(Speed, \
   VecFloat*: _PBPhysParticleSetSpeed, \
@@ -436,7 +456,8 @@ void PBPhysAddParticles(PBPhys* const that, const int nb, const ShapoidType shap
   const VecFloat*: _PBPhysParticleSetSpeed, \
   const VecFloat2D*: _PBPhysParticleSetSpeed, \
   const VecFloat3D*: _PBPhysParticleSetSpeed, \
-  default: PBErrInvalidPolymorphism)(Particle, (const VecFloat* const)(Speed))
+  default: PBErrInvalidPolymorphism)(Particle, \
+    (const VecFloat* const)(Speed))
 
 #define PBPhysParticleAddSpeed(Particle, Vec, Coeff) _Generic(Vec, \
   VecFloat*: _PBPhysParticleAddSpeed, \
@@ -445,7 +466,8 @@ void PBPhysAddParticles(PBPhys* const that, const int nb, const ShapoidType shap
   const VecFloat*: _PBPhysParticleAddSpeed, \
   const VecFloat2D*: _PBPhysParticleAddSpeed, \
   const VecFloat3D*: _PBPhysParticleAddSpeed, \
-  default: PBErrInvalidPolymorphism)(Particle, (const VecFloat* const)(Vec), Coeff)
+  default: PBErrInvalidPolymorphism)(Particle, \
+    (const VecFloat* const)(Vec), Coeff)
 
 #define PBPhysParticleAddSysAccel(Particle, Vec, Coeff) _Generic(Vec, \
   VecFloat*: _PBPhysParticleAddSysAccel, \
@@ -454,7 +476,8 @@ void PBPhysAddParticles(PBPhys* const that, const int nb, const ShapoidType shap
   const VecFloat*: _PBPhysParticleAddSysAccel, \
   const VecFloat2D*: _PBPhysParticleAddSysAccel, \
   const VecFloat3D*: _PBPhysParticleAddSysAccel, \
-  default: PBErrInvalidPolymorphism)(Particle, (const VecFloat* const)(Vec), Coeff)
+  default: PBErrInvalidPolymorphism)(Particle, \
+    (const VecFloat* const)(Vec), Coeff)
 
 #define PBPhysParticleSetPos(Particle, Pos) _Generic(Pos, \
   VecFloat*: _PBPhysParticleSetPos, \
@@ -463,7 +486,8 @@ void PBPhysAddParticles(PBPhys* const that, const int nb, const ShapoidType shap
   const VecFloat*: _PBPhysParticleSetPos, \
   const VecFloat2D*: _PBPhysParticleSetPos, \
   const VecFloat3D*: _PBPhysParticleSetPos, \
-  default: PBErrInvalidPolymorphism)(Particle, (const VecFloat* const)(Pos))
+  default: PBErrInvalidPolymorphism)(Particle, \
+    (const VecFloat* const)(Pos))
 
 #define PBPhysParticleAddPos(Particle, Vec, Coeff) _Generic(Vec, \
   VecFloat*: _PBPhysParticleAddPos, \
@@ -472,7 +496,8 @@ void PBPhysAddParticles(PBPhys* const that, const int nb, const ShapoidType shap
   const VecFloat*: _PBPhysParticleAddPos, \
   const VecFloat2D*: _PBPhysParticlevPos, \
   const VecFloat3D*: _PBPhysParticleAddPos, \
-  default: PBErrInvalidPolymorphism)(Particle, (const VecFloat* const)(Vec), Coeff)
+  default: PBErrInvalidPolymorphism)(Particle, \
+    (const VecFloat* const)(Vec), Coeff)
 
 #define PBPhysParticleSetSize(Particle, Size) _Generic(Size, \
   VecFloat*: _PBPhysParticleSetSizeVec, \
