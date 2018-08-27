@@ -1030,7 +1030,7 @@ VecFloat3D PBPhysGetDistPoly(const VecFloat* const posA,
   // Declare the vector result
   VecFloat3D res = VecFloatCreateStatic3D();
   // Loop on dimensions
-  for (int iDim = VecGetDim(posA); iDim--;) {
+  for (long iDim = VecGetDim(posA); iDim--;) {
     VecSetAdd(&res, 0, 
       fsquare(VecGet(posA, iDim) - VecGet(posB, iDim)));
     VecSetAdd(&res, 1, 

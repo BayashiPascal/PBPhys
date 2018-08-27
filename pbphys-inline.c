@@ -153,7 +153,7 @@ void _PBPhysParticleSetSpeed(const PBPhysParticle* const that,
   }
   if (VecGetDim(speed) != PBPhysParticleGetDim(that)) {
     PBPhysErr->_type = PBErrTypeNullPointer;
-    sprintf(PBPhysErr->_msg, "'speed' 's dimension is invalid (%d=%d)",
+    sprintf(PBPhysErr->_msg, "'speed' 's dimension is invalid (%ld=%d)",
       VecGetDim(speed), PBPhysParticleGetDim(that));
     PBErrCatch(PBPhysErr);
   }
@@ -183,7 +183,7 @@ void _PBPhysParticleAddSpeed(const PBPhysParticle* const that,
   }
   if (VecGetDim(v) != PBPhysParticleGetDim(that)) {
     PBPhysErr->_type = PBErrTypeNullPointer;
-    sprintf(PBPhysErr->_msg, "'v' 's dimension is invalid (%d=%d)",
+    sprintf(PBPhysErr->_msg, "'v' 's dimension is invalid (%ld=%d)",
       VecGetDim(v), PBPhysParticleGetDim(that));
     PBErrCatch(PBPhysErr);
   }
@@ -213,7 +213,7 @@ void _PBPhysParticleAddSysAccel(const PBPhysParticle* const that,
   }
   if (VecGetDim(v) != PBPhysParticleGetDim(that)) {
     PBPhysErr->_type = PBErrTypeNullPointer;
-    sprintf(PBPhysErr->_msg, "'v' 's dimension is invalid (%d=%d)",
+    sprintf(PBPhysErr->_msg, "'v' 's dimension is invalid (%ld=%d)",
       VecGetDim(v), PBPhysParticleGetDim(that));
     PBErrCatch(PBPhysErr);
   }
@@ -244,7 +244,7 @@ void _PBPhysParticleSetAccel(PBPhysParticle* const that,
   }
   if (VecGetDim(accel) != PBPhysParticleGetDim(that)) {
     PBPhysErr->_type = PBErrTypeNullPointer;
-    sprintf(PBPhysErr->_msg, "'accel' 's dimension is invalid (%d=%d)",
+    sprintf(PBPhysErr->_msg, "'accel' 's dimension is invalid (%ld=%d)",
       VecGetDim(accel), PBPhysParticleGetDim(that));
     PBErrCatch(PBPhysErr);
   }
@@ -306,7 +306,7 @@ void _PBPhysParticleSetPos(PBPhysParticle* const that,
   }
   if (VecGetDim(pos) != PBPhysParticleGetDim(that)) {
     PBPhysErr->_type = PBErrTypeNullPointer;
-    sprintf(PBPhysErr->_msg, "'pos' 's dimension is invalid (%d=%d)",
+    sprintf(PBPhysErr->_msg, "'pos' 's dimension is invalid (%ld=%d)",
       VecGetDim(pos), PBPhysParticleGetDim(that));
     PBErrCatch(PBPhysErr);
   }
@@ -334,7 +334,7 @@ void _PBPhysParticleAddPos(PBPhysParticle* const that,
   }
   if (VecGetDim(v) != PBPhysParticleGetDim(that)) {
     PBPhysErr->_type = PBErrTypeNullPointer;
-    sprintf(PBPhysErr->_msg, "'v' 's dimension is invalid (%d=%d)",
+    sprintf(PBPhysErr->_msg, "'v' 's dimension is invalid (%ld=%d)",
       VecGetDim(v), PBPhysParticleGetDim(that));
     PBErrCatch(PBPhysErr);
   }
@@ -394,7 +394,7 @@ void _PBPhysParticleSetSizeVec(PBPhysParticle* const that,
   }
   if (VecGetDim(size) != PBPhysParticleGetDim(that)) {
     PBPhysErr->_type = PBErrTypeNullPointer;
-    sprintf(PBPhysErr->_msg, "'size' 's dimension is invalid (%d=%d)",
+    sprintf(PBPhysErr->_msg, "'size' 's dimension is invalid (%ld=%d)",
       VecGetDim(size), PBPhysParticleGetDim(that));
     PBErrCatch(PBPhysErr);
   }
