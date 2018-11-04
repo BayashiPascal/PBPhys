@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.10.18)  30 OCT 2018 23:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.10.18)  4 NOV 2018 21:54
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -558,61 +558,90 @@ Underfull \hbox (badness 10000) in paragraph at lines 50--51
 
  []
 
-No file /home/bayashi/Coding/PBPhys/pbphys.h.
-No file /home/bayashi/Coding/PBPhys/pbphys.c.
-No file /home/bayashi/Coding/PBPhys/pbphys-inline.c.
-No file /home/bayashi/Coding/PBPhys/Makefile.
-No file /home/bayashi/Coding/PBPhys/main.c.
-No file /home/bayashi/Coding/PBPhys/unitTestRef.txt.
-No file /home/bayashi/Coding/PBPhys/traj.txt.
+File: /home/bayashi/GitHub/PBPhys/pbphys.h  (verbatim)
+[3] [4] [5] [6] [7] [8] [9] [10] [11]
+File: /home/bayashi/GitHub/PBPhys/pbphys.c  (verbatim)
+ [12] [13] [14] [15] [16] [17] [18]
+[19] [20] [21] [22] [23] [24] [25] [26] [27] [28]
+File: /home/bayashi/GitHub/PBPhys/pbphys-inline.c  (verbatim)
+ [29] [30] [31] [32] [33]
+[34] [35] [36] [37] [38] [39] [40] [41]
+File: /home/bayashi/GitHub/PBPhys/Makefile  (verbatim)
 
-Underfull \hbox (badness 10000) in paragraph at lines 108--114
+Overfull \hbox (812.76727pt too wide) in paragraph at lines 88--88
+[]\OT1/cmtt/m/n/8 if [ ! -d ../PBMake ]; then wget https://github.com/BayashiPa
+scal/PBMake/archive/master.zip; unzip master.zip; rm -f master.zip; sed -i 's@R
+OOT_DIR=.*@ROOT_DIR='"`pwd | awk -F/ 'NF{NF-=1};1' | sed --expression='s@ @/@g'
+`"'@' PBMake-master/Makefile.inc; mv PBMake-master ../PBMake; fi[] 
+ []
+
+
+Overfull \hbox (196.50842pt too wide) in paragraph at lines 88--88
+[]\OT1/cmtt/m/n/8 $(COMPILER) `echo "$($(repo)_EXE_DEP) $($(repo)_EXENAME).o" |
+ tr ' ' '\n' | sort -u` $(LINK_ARG) $($(repo)_LINK_ARG) -o $($(repo)_EXENAME)[]
+ 
+ []
+
+
+Overfull \hbox (188.0083pt too wide) in paragraph at lines 88--88
+[]\OT1/cmtt/m/n/8 $(COMPILER) $(BUILD_ARG) $($(repo)_BUILD_ARG) `echo "$($(repo
+)_INC_DIR)" | tr ' ' '\n' | sort -u` -c $($(repo)_DIR)/$($(repo)_EXENAME).c[] 
+ []
+
+File: /home/bayashi/GitHub/PBPhys/main.c  (verbatim)
+[42] [43] [44] [45] [46] [47] [48] [49] [50] [51] [52] [53]
+File: /home/bayashi/GitHub/PBPhys/unitTestRef.txt  (verbatim)
+ [54]
+Underfull \hbox (badness 10000) in paragraph at lines 108--111
 
  []
 
-[3] <./trajectory.png, id=25, 576.1525pt x 335.2525pt>
+File: /home/bayashi/GitHub/PBPhys/traj.txt  (verbatim)
+[55] [56] <./trajectory.png, id=194, 576.1525pt x 335.2525pt>
 File: ./trajectory.png Graphic file (type png)
- <use ./trajectory.png>
+
+<use ./trajectory.png>
 Package pdftex.def Info: ./trajectory.png used on input line 116.
 (pdftex.def)             Requested size: 284.52756pt x 165.56427pt.
 
-No file /home/bayashi/Coding/PBPhys/collision.txt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--126
+Underfull \hbox (badness 10000) in paragraph at lines 120--123
 
  []
 
-<./collision.png, id=26, 572.1375pt x 333.245pt>
+File: /home/bayashi/GitHub/PBPhys/collision.txt  (verbatim)
+<./collision.png, id=195, 572.1375pt x 333.245pt>
 File: ./collision.png Graphic file (type png)
  <use ./collision.png>
 Package pdftex.def Info: ./collision.png used on input line 128.
 (pdftex.def)             Requested size: 284.52756pt x 165.72714pt.
- [4 <./trajectory.png (PNG copy)>]) [5 <./collision.png (PNG copy)>] (./doc.aux
-) ) 
+
+[57 <./trajectory.png (PNG copy)>]) [58 <./collision.png (PNG copy)>]
+(./doc.aux) ) 
 Here is how much of TeX's memory you used:
- 13279 strings out of 494314
- 255317 string characters out of 6163111
+ 13287 strings out of 494314
+ 255662 string characters out of 6163111
  302773 words of memory out of 5000000
- 16366 multiletter control sequences out of 15000+600000
+ 16374 multiletter control sequences out of 15000+600000
  12740 words of font info for 50 fonts, out of 8000000 for 9000
  372 hyphenation exceptions out of 8191
- 55i,15n,54p,723b,284s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmtt12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symb
-ols/msbm10.pfb>
+ 55i,15n,54p,723b,310s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx
+12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmtt12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/s
+ymbols/msbm10.pfb>
 
 pdfTeX warning: pdflatex: no GlyphToUnicode entry has been inserted yet!
-Output written on doc.pdf (5 pages, 143144 bytes).
+Output written on doc.pdf (58 pages, 234013 bytes).
 PDF statistics:
- 67 PDF objects out of 1000 (max. 8388607)
+ 242 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  23 words of extra memory for PDF output out of 10000 (max. 10000000)
 
