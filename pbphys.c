@@ -190,13 +190,13 @@ bool PBPhysParticleDecodeAsJSON(PBPhysParticle** that,
   if (prop == NULL) {
     return false;
   }
-  int dim = atoi(JSONLabel(JSONValue(prop, 0)));
+  int dim = atoi(JSONLblVal(prop));
   // Get the type from the JSON
   prop = JSONProperty(json, "_type");
   if (prop == NULL) {
     return false;
   }
-  int type = atoi(JSONLabel(JSONValue(prop, 0)));
+  int type = atoi(JSONLblVal(prop));
   // If the data is invalid
   if (dim <= 0)
     return false;
@@ -231,19 +231,19 @@ bool PBPhysParticleDecodeAsJSON(PBPhysParticle** that,
   if (prop == NULL) {
     return false;
   }
-  (*that)->_mass = atof(JSONLabel(JSONValue(prop, 0)));
+  (*that)->_mass = atof(JSONLblVal(prop));
   // Get the drag from the JSON
   prop = JSONProperty(json, "_drag");
   if (prop == NULL) {
     return false;
   }
-  (*that)->_drag = atof(JSONLabel(JSONValue(prop, 0)));
+  (*that)->_drag = atof(JSONLblVal(prop));
   // Get the fixed from the JSON
   prop = JSONProperty(json, "_fixed");
   if (prop == NULL) {
     return false;
   }
-  (*that)->_fixed = atoi(JSONLabel(JSONValue(prop, 0)));
+  (*that)->_fixed = atoi(JSONLblVal(prop));
   // Return the success code
   return true;
 }
@@ -637,7 +637,7 @@ bool PBPhysDecodeAsJSON(PBPhys** that, const JSONNode* const json) {
   if (prop == NULL) {
     return false;
   }
-  int dim = atoi(JSONLabel(JSONValue(prop, 0)));
+  int dim = atoi(JSONLblVal(prop));
   // If data is invalid
   if (dim <= 0)
     return false;
@@ -648,31 +648,31 @@ bool PBPhysDecodeAsJSON(PBPhys** that, const JSONNode* const json) {
   if (prop == NULL) {
     return false;
   }
-  (*that)->_curTime = atof(JSONLabel(JSONValue(prop, 0)));
+  (*that)->_curTime = atof(JSONLblVal(prop));
   // Decode the deltaT
   prop = JSONProperty(json, "_deltaT");
   if (prop == NULL) {
     return false;
   }
-  (*that)->_deltaT = atof(JSONLabel(JSONValue(prop, 0)));
+  (*that)->_deltaT = atof(JSONLblVal(prop));
   // Decode the downGravity
   prop = JSONProperty(json, "_downGravity");
   if (prop == NULL) {
     return false;
   }
-  (*that)->_downGravity = atof(JSONLabel(JSONValue(prop, 0)));
+  (*that)->_downGravity = atof(JSONLblVal(prop));
   // Decode the gravity
   prop = JSONProperty(json, "_gravity");
   if (prop == NULL) {
     return false;
   }
-  (*that)->_gravity = atof(JSONLabel(JSONValue(prop, 0)));
+  (*that)->_gravity = atof(JSONLblVal(prop));
   // Decode the nbParticle
   prop = JSONProperty(json, "_nbParticle");
   if (prop == NULL) {
     return false;
   }
-  int nbParticle = atoi(JSONLabel(JSONValue(prop, 0)));
+  int nbParticle = atoi(JSONLblVal(prop));
   // Decode the particle
   prop = JSONProperty(json, "_particles");
   if (prop == NULL) {
