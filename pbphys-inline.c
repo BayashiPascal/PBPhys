@@ -1,4 +1,4 @@
-// ============ PBPHYS-INLINE.C ================
+// ============ PBPHYS-static inline.C ================
 
 // ------------ PBPhysParticle
 
@@ -6,7 +6,7 @@
 
 // Return the dimension of the particle 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 int PBPhysParticleGetDim(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
@@ -21,7 +21,7 @@ int PBPhysParticleGetDim(const PBPhysParticle* const that) {
 
 // Return the shape type of the particle 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 ShapoidType PBPhysParticleGetShapeType(
   const PBPhysParticle* const that) {
@@ -37,7 +37,7 @@ ShapoidType PBPhysParticleGetShapeType(
 
 // Return the shape of the particle 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 const Shapoid* PBPhysParticleShape(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
@@ -52,7 +52,7 @@ const Shapoid* PBPhysParticleShape(const PBPhysParticle* const that) {
 
 // Return the 'iAxis'-th axis of the shape of the particle 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 const VecFloat* PBPhysParticleAxis(const PBPhysParticle* const that, 
   const int iAxis) {
@@ -74,7 +74,7 @@ const VecFloat* PBPhysParticleAxis(const PBPhysParticle* const that,
 
 // Return the speed of the particle 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 const VecFloat* PBPhysParticleSpeed(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
@@ -89,7 +89,7 @@ const VecFloat* PBPhysParticleSpeed(const PBPhysParticle* const that) {
 
 // Return the acceleration of the particle 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 const VecFloat* PBPhysParticleAccel(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
@@ -104,7 +104,7 @@ const VecFloat* PBPhysParticleAccel(const PBPhysParticle* const that) {
 
 // Return the sysAccel of the particle 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 const VecFloat* PBPhysParticleSysAccel(
   const PBPhysParticle* const that) {
@@ -120,7 +120,7 @@ const VecFloat* PBPhysParticleSysAccel(
 
 // Return the position of the center of the particle 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 VecFloat* PBPhysParticleGetPos(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
@@ -136,7 +136,7 @@ VecFloat* PBPhysParticleGetPos(const PBPhysParticle* const that) {
 // Set the speed of the particle 'that' to 'speed'
 // If the particle is fixed do nothing
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void _PBPhysParticleSetSpeed(const PBPhysParticle* const that, 
   const VecFloat* const speed) {
@@ -166,7 +166,7 @@ void _PBPhysParticleSetSpeed(const PBPhysParticle* const that,
 // by 'c'
 // If the particle is fixed do nothing
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void _PBPhysParticleAddSpeed(const PBPhysParticle* const that, 
   const VecFloat* const v, const float c) {
@@ -196,7 +196,7 @@ void _PBPhysParticleAddSpeed(const PBPhysParticle* const that,
 // multiplied by 'c'
 // If the particle is fixed do nothing
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void _PBPhysParticleAddSysAccel(const PBPhysParticle* const that, 
   const VecFloat* const v, const float c) {
@@ -227,7 +227,7 @@ void _PBPhysParticleAddSysAccel(const PBPhysParticle* const that,
 // Set the acceleration of the particle 'that' to 'accel'
 // If the particle is fixed do nothing
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void _PBPhysParticleSetAccel(PBPhysParticle* const that, 
   const VecFloat* const accel) {
@@ -255,7 +255,7 @@ void _PBPhysParticleSetAccel(PBPhysParticle* const that,
 
 // Reset the system acceleration of the particle 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void PBPhysParticleResetSysAccel(PBPhysParticle* const that) {
 #if BUILDMODE == 0
@@ -272,7 +272,7 @@ void PBPhysParticleResetSysAccel(PBPhysParticle* const that) {
 // particle 'that' (substract 'gravity' to the axis y)
 // If the particle is fixed do nothing
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void PBPhysParticleApplyGravity(PBPhysParticle* const that, 
   const float gravity) {
@@ -289,7 +289,7 @@ void PBPhysParticleApplyGravity(PBPhysParticle* const that,
 
 // Set the position of the center of the particle 'that' to 'pos'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void _PBPhysParticleSetPos(PBPhysParticle* const that, 
   const VecFloat* const pos) {
@@ -317,7 +317,7 @@ void _PBPhysParticleSetPos(PBPhysParticle* const that,
 // Add to the position of the center of the particle 'that' the 
 // vector 'v' multiplied by 'c'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void _PBPhysParticleAddPos(PBPhysParticle* const that, 
   const VecFloat* const v, const float c) {
@@ -349,7 +349,7 @@ void _PBPhysParticleAddPos(PBPhysParticle* const that,
 // Return false else
 // User data is not compared
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 bool PBPhysParticleIsSame(const PBPhysParticle* const that, 
   const PBPhysParticle* const tho) {
@@ -377,7 +377,7 @@ bool PBPhysParticleIsSame(const PBPhysParticle* const that,
 
 // Set the shape size of the particle 'that' to 'size'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void _PBPhysParticleSetSizeVec(PBPhysParticle* const that, 
   const VecFloat* const size) {
@@ -407,7 +407,7 @@ void _PBPhysParticleSetSizeVec(PBPhysParticle* const that,
 }
 
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void _PBPhysParticleSetSizeScalar(PBPhysParticle* const that, 
   const float size) {
@@ -427,7 +427,7 @@ void _PBPhysParticleSetSizeScalar(PBPhysParticle* const that,
 
 // Return the mass of the particle 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 float PBPhysParticleGetMass(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
@@ -442,7 +442,7 @@ float PBPhysParticleGetMass(const PBPhysParticle* const that) {
 
 // Set the mass of the particle 'that' to 'mass'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void PBPhysParticleSetMass(PBPhysParticle* const that, 
   const float mass) {
@@ -458,7 +458,7 @@ void PBPhysParticleSetMass(PBPhysParticle* const that,
 
 // Return the drag of the particle 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 float PBPhysParticleGetDrag(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
@@ -473,7 +473,7 @@ float PBPhysParticleGetDrag(const PBPhysParticle* const that) {
 
 // Set the drag of the particle 'that' to 'drag'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void PBPhysParticleSetDrag(PBPhysParticle* const that, 
   const float drag) {
@@ -490,7 +490,7 @@ void PBPhysParticleSetDrag(PBPhysParticle* const that,
 // Return true if the particle 'that' is fixed
 // Return false else
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 bool PBPhysParticleIsFixed(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
@@ -505,7 +505,7 @@ bool PBPhysParticleIsFixed(const PBPhysParticle* const that) {
 
 // Set the fixed flag of the particle 'that' to 'fixed'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void PBPhysParticleSetFixed(PBPhysParticle* const that, 
   const bool fixed) {
@@ -525,7 +525,7 @@ void PBPhysParticleSetFixed(PBPhysParticle* const that,
 
 // Set the user data of the particle 'that' to 'data'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void PBPhysParticleSetData(PBPhysParticle* const that, 
   void* const data) {
@@ -541,7 +541,7 @@ void PBPhysParticleSetData(PBPhysParticle* const that,
 
 // Get the user data of the particle 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void* PBPhysParticleData(const PBPhysParticle* const that) {
 #if BUILDMODE == 0
@@ -560,7 +560,7 @@ void* PBPhysParticleData(const PBPhysParticle* const that) {
 
 // Return the space dimension of the PBPhys 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 int PBPhysGetDim(const PBPhys* const that) {
 #if BUILDMODE == 0
@@ -575,7 +575,7 @@ int PBPhysGetDim(const PBPhys* const that) {
 
 // Return the set of particles of the PBPhys 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 GSetPBPhysParticle* PBPhysParticles(const PBPhys* const that) {
 #if BUILDMODE == 0
@@ -590,7 +590,7 @@ GSetPBPhysParticle* PBPhysParticles(const PBPhys* const that) {
 
 // Return the delta t of the PBPhys 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 float PBPhysGetDeltaT(const PBPhys* const that) {
 #if BUILDMODE == 0
@@ -605,7 +605,7 @@ float PBPhysGetDeltaT(const PBPhys* const that) {
 
 // Return the current time of the PBPhys 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 float PBPhysGetCurTime(const PBPhys* const that) {
 #if BUILDMODE == 0
@@ -620,7 +620,7 @@ float PBPhysGetCurTime(const PBPhys* const that) {
 
 // Return the downward gravity of the PBPhys 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 float PBPhysGetDownGravity(const PBPhys* const that) {
 #if BUILDMODE == 0
@@ -635,7 +635,7 @@ float PBPhysGetDownGravity(const PBPhys* const that) {
 
 // Return the gravity coefficient between particles of the PBPhys 'that' 
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 float PBPhysGetGravity(const PBPhys* const that) {
 #if BUILDMODE == 0
@@ -650,7 +650,7 @@ float PBPhysGetGravity(const PBPhys* const that) {
 
 // Set the delta t of the PBPhys 'that' to 'deltaT'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void PBPhysSetDeltaT(PBPhys* const that, const float deltaT) {
 #if BUILDMODE == 0
@@ -665,7 +665,7 @@ void PBPhysSetDeltaT(PBPhys* const that, const float deltaT) {
 
 // Set the current time of the PBPhys 'that' to 't'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void PBPhysSetCurTime(PBPhys* const that, const float t) {
 #if BUILDMODE == 0
@@ -680,7 +680,7 @@ void PBPhysSetCurTime(PBPhys* const that, const float t) {
 
 // Set the downward gravity of the PBPhys 'that' to 'gravity'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void PBPhysSetDownGravity(PBPhys* const that, float gravity) {
 #if BUILDMODE == 0
@@ -696,7 +696,7 @@ void PBPhysSetDownGravity(PBPhys* const that, float gravity) {
 // Set the gravity coefficient between particles of the PBPhys 'that'
 // to 'gravity'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void PBPhysSetGravity(PBPhys* const that, float gravity) {
 #if BUILDMODE == 0
@@ -711,7 +711,7 @@ void PBPhysSetGravity(PBPhys* const that, float gravity) {
 
 // Return the 'iParticle'-th particle of the PBPhys 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 PBPhysParticle* PBPhysPart(const PBPhys* const that, 
   const int iParticle) {
@@ -733,7 +733,7 @@ PBPhysParticle* PBPhysPart(const PBPhys* const that,
 
 // Get the number of particles of the PBPhys 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 int PBPhysGetNbParticle(const PBPhys* const that) {
 #if BUILDMODE == 0
@@ -748,7 +748,7 @@ int PBPhysGetNbParticle(const PBPhys* const that) {
 
 // Add 'nb' particles of shape 'shape' into the PBPhys 'that'
 #if BUILDMODE != 0
-inline
+static inline
 #endif
 void PBPhysAddParticles(PBPhys* const that, const int nb, 
   const ShapoidType shape) {
